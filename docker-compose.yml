@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  pygame-app:
+    build: .
+    container_name: pygame_container
+    environment:
+      - DISPLAY=:99
+    volumes:
+      - .:/app
+    command: xvfb-run --auto-servernum --server-args="-screen 0 800x600x24" python client.py
