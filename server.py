@@ -1,6 +1,7 @@
 import socket
 from _thread import *
 import sys
+import signal
 
         #  192.168.1.187 netmask 0xffffff00 broadcast 192.168.1.255
 
@@ -19,6 +20,7 @@ print("Waiting for a conncetion, Server Started")
 
 
 def threaded_client(conn):
+    conn.send(str.encode("Connected"))
 
     reply = ""
     while True:
@@ -35,10 +37,20 @@ def threaded_client(conn):
 
             conn.sendall(str.encode(reply))
         except:
+            print(f"Error: {e}")
             break
+    print("Lost connection")
+    conn.close()
+
+def signal_handler(sig, frame):
+    print("\nServer is shutting down gracefullly...")
+    s.close()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
         
 while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
 
-    start_new_thread(thread_client, (conn,))
+    start_new_thread(threaded_client, (conn,))
