@@ -12,7 +12,17 @@ class Network:
     def connect(self):
         try:
             self.client.connect(self.addr)
+            print("messages tese")
             return self.client.recv(2048).decode()
         except:
+            print("messages tese")
             pass
-n = Network()
+    def send(self, data):
+        try:
+            self.client.recv(2048).decode()
+        except socket.error as e:
+            print(e)
+n = Network(
+    print(n.send("hello"))
+    print(n.send())
+)
